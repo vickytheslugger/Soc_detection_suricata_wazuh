@@ -50,7 +50,8 @@ PORT   STATE SERVICE
 
 Every port except 80 returns no response at all — silently dropped by the firewall rule, not by the host. Only the one deliberately-exposed service is visible from the attacker zone.
 
-![nmap recon — only port 80 open](screenshots/01-nmap-recon.png)
+<img width="968" height="366" alt="01-nmap-recon" src="https://github.com/user-attachments/assets/65eca2a6-3c58-4256-bc57-9950026bdd0e" />
+
 
 ### 2. Exploitation — SQL injection confirmed with sqlmap
 
@@ -63,7 +64,8 @@ Every port except 80 returns no response at all — silently dropped by the fire
 
 Fingerprinted stack: **MySQL/MariaDB** backend, **Apache 2.4.58**, **PHP 8.0.30**, Windows host — all matching the real target.
 
-![sqlmap confirming SQL injection](screenshots/02-sqlmap-exploit.png)
+<img width="986" height="1008" alt="02-sqlmap-exploit" src="https://github.com/user-attachments/assets/6cba6272-c3fc-437a-8e83-6293cdd7fb91" />
+
 
 ## Detection (Defender's View)
 
@@ -71,25 +73,29 @@ Fingerprinted stack: **MySQL/MariaDB** backend, **Apache 2.4.58**, **PHP 8.0.30*
 
 The firewall log shows the Block rule catching every connection attempt outside the one allowed path (here, scan traffic from the attacker zone `192.168.20.30` hitting dozens of ports on the target):
 
-![pfSense firewall log showing blocked traffic](screenshots/03-pfsense-firewall-log.png)
+<img width="953" height="869" alt="03-pfsense-firewall-log" src="https://github.com/user-attachments/assets/ce7c6fcc-f0ee-4231-83d6-1d4effab96c9" />
+
 
 ### 4. Network IDS — Suricata alerts in the Wazuh dashboard
 
 Suricata (rule group `suricata`, Wazuh rule ID **86601**) raised multiple alerts tied to the attack traffic, including `ET SCAN Potential SSH Scan OUTBOUND`, `SURICATA HTTP Response excessive header repetition`, and `ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response` — all correlated with real timestamps in the dashboard:
 
-![Wazuh Threat Hunting view — Suricata alerts](screenshots/04-wazuh-suricata-alerts.png)
+<img width="1917" height="951" alt="04-wazuh-suricata-alerts" src="https://github.com/user-attachments/assets/ab9eefca-05cc-4e7b-b452-2fed87c5e636" />
+
 
 ### 5. Host layer — MITRE ATT&CK-mapped endpoint activity
 
 The Wazuh agent + Sysmon on the Windows target independently reported host-level activity mapped to MITRE ATT&CK techniques, including **T1570 (Lateral Movement)** and **T1543.003 (Persistence, Privilege Escalation — New Windows Service)**:
 
-![Wazuh MITRE ATT&CK mapping](screenshots/05-wazuh-mitre-attack-mapping.png)
+<img width="1906" height="937" alt="05-wazuh-mitre-attack-mapping" src="https://github.com/user-attachments/assets/1877834a-5e38-465d-9d44-ac256eec629d" />
+
 
 ### 6. Vulnerability management — endpoint CVE inventory
 
 Wazuh's vulnerability detection module scanned the Windows 10 target's installed software and surfaced thousands of matched CVEs (high-severity examples: heap-based buffer overflows in Windows ALPC and the Biometric Service), demonstrating a second, independent detection capability beyond live attack monitoring:
 
-![Wazuh vulnerability detection on the Windows target](screenshots/06-wazuh-vulnerability-detection.png)
+<img width="1919" height="915" alt="06-wazuh-vulnerability-detection" src="https://github.com/user-attachments/assets/085b87df-4bc0-4ba8-9b2d-c2a702ec78bd" />
+
 
 ## Operational Challenges Encountered
 
