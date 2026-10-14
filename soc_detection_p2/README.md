@@ -126,9 +126,3 @@ Each of these was diagnosed by isolating the chain (ping → TCP connectivity �
 - **Sysmon** — Windows endpoint telemetry (process, registry, network, file events)
 - **Kali Linux** — attacker platform (`nmap`, `sqlmap`)
 - **DVWA** — intentionally vulnerable web application target
-
-## Next Steps
-
-- Atomic Red Team technique execution for broader MITRE ATT&CK coverage
-- Custom severity-tiered detection rules (`local_rules.xml`)
-- SOAR-style alert automation (n8n routing to Telegram/Slack)
